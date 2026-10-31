@@ -9,6 +9,12 @@
     import sys; sys.path.insert(0, "tools")   # если запускаешь из корня репозитория
     from brute import solve, assign
 """
+import sys
+try:  # Windows: не падать на символах, которых нет в кодировке консоли
+    sys.stdout.reconfigure(errors="replace")
+except Exception:
+    pass
+
 from itertools import product, permutations
 
 

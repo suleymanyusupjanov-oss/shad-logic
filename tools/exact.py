@@ -9,6 +9,12 @@
     prob(S, lambda w: sum(w) == 7, given=lambda w: 6 in w)   # условная: 2/11
     expect(S, lambda w: max(w))                      # матожидание максимума
 """
+import sys
+try:  # Windows: не падать на символах, которых нет в кодировке консоли
+    sys.stdout.reconfigure(errors="replace")
+except Exception:
+    pass
+
 from fractions import Fraction
 from itertools import product, permutations, combinations
 
@@ -40,7 +46,7 @@ def prob(outcomes, event, given=None, weights=None, show=True):
         raise ValueError("условие given не выполняется ни в одном исходе")
     r = num / den
     if show:
-        print(f"P = {r}  ≈ {float(r):.6f}   (исходов в условии: {len(cond)})")
+        print(f"P = {r}  ~ {float(r):.6f}   (исходов в условии: {len(cond)})")
     return r
 
 
@@ -52,7 +58,7 @@ def expect(outcomes, f, weights=None, show=True):
         weights = [Fraction(w) for w in weights]
     r = sum(Fraction(f(w)) * p for w, p in zip(outcomes, weights)) / sum(weights)
     if show:
-        print(f"E = {r}  ≈ {float(r):.6f}")
+        print(f"E = {r}  ~ {float(r):.6f}")
     return r
 
 

@@ -8,8 +8,14 @@
     import random
     def trial(rng):              # один опыт; вернуть число (1/0 для события)
         return int(rng.randint(1, 6) + rng.randint(1, 6) == 7)
-    mc(trial)                    # ≈ 0.1667 ± 0.0016
+    mc(trial)                    # ~ 0.1667 ± 0.0016
 """
+import sys
+try:  # Windows: не падать на символах, которых нет в кодировке консоли
+    sys.stdout.reconfigure(errors="replace")
+except Exception:
+    pass
+
 import math
 import random
 

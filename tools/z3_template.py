@@ -4,6 +4,12 @@
 
 Главное: all_solutions() считает ВСЕ решения. Одно — задача решена однозначно.
 """
+import sys
+try:  # Windows: не падать на символах, которых нет в кодировке консоли
+    sys.stdout.reconfigure(errors="replace")
+except Exception:
+    pass
+
 from z3 import Int, Bool, Solver, Distinct, And, Or, Not, Implies, If, Sum, sat
 
 
