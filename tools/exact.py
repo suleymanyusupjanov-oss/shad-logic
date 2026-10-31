@@ -10,8 +10,8 @@
     expect(S, lambda w: max(w))                      # матожидание максимума
 """
 import sys
-try:  # Windows: не падать на символах, которых нет в кодировке консоли
-    sys.stdout.reconfigure(errors="replace")
+try:  # Windows: всегда печатать в UTF-8, чтобы кириллица не превращалась в «?»
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
     pass
 
