@@ -21,6 +21,7 @@
   условия: сверху/снизу/слева/справа свободно|стена, клетка закрашена|чистая;
   значения: радиация, температура; и, или, не, да, нет, =, <>, <, >, <=, >=, div, mod, abs, int.
 НЕ поддерживается: алгоритмы с параметрами, выбор/при, ввод. Если встретится — KumirError.
+Как на платформе теста: «дано»/«надо» запрещены, «нач» — сразу после строки «алг».
 Пиши по одной команде в строке (или через «;») — так надёжнее и для КуМира, и для этой проверки.
 """
 import re
@@ -130,17 +131,25 @@ def translate(code):
     def loops_open():
         return any(b in ("while", "for", "post") for b in stack)
 
+    expect_nach = False
     for ln, st in stmts:
         w = st.split()
         head = w[0]
         if st.startswith("использовать"):
             continue
+        if head in ("дано", "надо"):
+            raise KumirError(f"строка {ln}: «{head}» — КуМир на платформе теста это не принимает "
+                             f"(«ожидалось 'нач' после заголовка функции»). Удали строку, условие пиши комментарием «|».")
+        if expect_nach and head != "нач":
+            raise KumirError(f"строка {ln}: после «алг» сразу должно идти «нач» (так требует КуМир на платформе)")
+        expect_nach = False
         if head == "алг":
             name = st[3:].strip()
             emit(f"def {pyname[name]}():", ln)
             ind += 1
             emit("pass", ln)
             stack.append("alg")
+            expect_nach = True
             continue
         if head == "нач":
             continue
